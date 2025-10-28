@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>익명 커뮤니티</title>
+
+    <style>
+        /* 전체 레이아웃 */
+        body {
+            background-color: #0f172a; /* 아주 진한 남색(다크모드 느낌) */
+            color: #f8fafc;            /* 거의 흰색 */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Pretendard", Roboto, sans-serif;
+            margin: 0;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* 페이지 헤더 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1.5rem;
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .new-post-btn {
+            background-color: #1e293b;
+            color: #f8fafc;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            border: 1px solid #334155;
+        }
+        .new-post-btn:hover {
+            background-color: #334155;
+        }
+
+        /* 게시글 카드 */
+        .post-card {
+            background-color: #1e253a;
+            border: 1px solid #47556944;
+            border-radius: 0.75rem;
+            padding: 1rem 1rem 0.75rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 16px 32px rgba(0,0,0,0.5);
+        }
+
+        .post-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .post-title:hover {
+            text-decoration: underline;
+        }
+
+        .post-likes {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
+
+        .post-content {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            line-height: 1.4rem;
+            margin-bottom: 0.75rem;
+            word-break: break-word;
+        }
+
+        .post-meta {
+            font-size: 0.7rem;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post-meta a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .post-meta a:hover {
+            text-decoration: underline;
+        }
+
+        /* 빈 상태 메시지 */
+        .empty {
+            text-align: center;
+            color: #475569;
+            font-size: 0.9rem;
+            background-color: #1e253a;
+            border: 1px dashed #47556988;
+            border-radius: 0.75rem;
+            padding: 2rem 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <div class="header-title">익명 게시판</div>
+        <a class="new-post-btn" href="{% url 'new_post' %}">+ 새 글 쓰기</a>
+    </header>
+
+    {% if posts %}
+        {% for post in posts %}
+            <article class="post-card">
+                <div class="post-title-row">
+                    <!-- ✅ 제목을 클릭하면 해당 글 상세 페이지로 이동 -->
+                    <a class="post-title" href="{% url 'post_detail' post.id %}">
+                        {{ post.title }}
+                    </a>
+
+                    <!-- ❤️ 공감 표시 -->
+                    <div class="post-likes">❤️ {{ post.likes }} 공감</div>
+                </div>
+
+                <div class="post-content">
+                    {{ post.content|linebreaksbr }}
+                </div>
+
+                <div class="post-meta">
+                    <span class="post-time">
+                        {{ post.created_at }}
+                    </span>
+
+                    <!-- ✅ “댓글 보기” 링크도 동일하게 상세 페이지로 이동 -->
+                    <a href="{% url 'post_detail' post.id %}">댓글 보기</a>
+                </div>
+            </article>
+        {% endfor %}
+    {% else %}
+        <div class="empty">
+            아직 올라온 글이 없어요.<br>
+            첫 번째 글을 남겨보세요!
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>

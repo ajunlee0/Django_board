@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>새 글 쓰기 - 익명 게시판</title>
+
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Pretendard", Roboto, sans-serif;
+            margin: 0;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .back-link {
+            display: inline-block;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-decoration: none;
+            margin-bottom: 1rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .form-card {
+            background-color: #1e253a;
+            border: 1px solid #47556944;
+            border-radius: 0.75rem;
+            box-shadow: 0 16px 32px rgba(0,0,0,0.5);
+            padding: 1rem 1rem 1rem;
+        }
+
+        .form-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            background-color: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 0.5rem;
+            color: #f8fafc;
+            font-size: 0.9rem;
+            padding: 0.75rem;
+            line-height: 1.4rem;
+            resize: vertical;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: #64748b;
+        }
+
+        textarea {
+            min-height: 120px;
+        }
+
+        .error-msg {
+            background-color: #7f1d1d;
+            border: 1px solid #dc2626;
+            color: #fecaca;
+            font-size: 0.8rem;
+            border-radius: 0.5rem;
+            padding: 0.6rem 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .submit-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        button.submit-btn {
+            background-color: #1e293b;
+            color: #f8fafc;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #334155;
+            cursor: pointer;
+        }
+
+        button.submit-btn:hover {
+            background-color: #334155;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <a class="back-link" href="{% url 'index' %}">&larr; 목록으로 돌아가기</a>
+
+    <section class="form-card">
+        <div class="form-title">새 글 작성</div>
+
+        {% if error %}
+            <div class="error-msg">{{ error }}</div>
+        {% endif %}
+
+        <form action="{% url 'new_post' %}" method="post">
+            {% csrf_token %}
+
+            <div class="field">
+                <label for="title">제목</label>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="예: 급식에 대해 토론하자"
+                    value="{{ title_value|default:'' }}"
+                />
+            </div>
+
+            <div class="field" style="margin-top:1rem;">
+                <label for="content">내용</label>
+                <textarea
+                    id="content"
+                    name="content"
+                    placeholder="하고 싶은 말을 자유롭게 적어줘. 익명 게시판이야."
+                >{{ content_value|default:'' }}</textarea>
+            </div>
+
+            <div class="submit-row">
+                <button class="submit-btn" type="submit">등록</button>
+            </div>
+        </form>
+    </section>
+
+</div>
+</body>
+</html>
